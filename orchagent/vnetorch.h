@@ -22,6 +22,7 @@
 #define VNET_ROUTE_FULL_MASK_OFFSET_MAX 3000
 #define VNET_NEIGHBOR_MAX 0xffff
 #define VXLAN_ENCAP_TTL 128
+#define DEFAULT_MONITOR_TIMER (-1)
 #define VNET_BITMAP_RIF_MTU 9100
 
 #define VNET_MONITORING_TYPE_CUSTOM "custom"
@@ -613,21 +614,6 @@ private:
     unique_ptr<Table> state_vnet_rt_adv_table_;
 
     shared_ptr<VNetTunnelTermAcl> vnet_tunnel_term_acl_;
-};
-
-class VNetCfgRouteOrch : public Orch
-{
-public:
-    VNetCfgRouteOrch(DBConnector *db, DBConnector *appDb, vector<string> &tableNames);
-    using Orch::doTask;
-
-private:
-    void doTask(Consumer &consumer);
-
-    bool doVnetTunnelRouteTask(const KeyOpFieldsValuesTuple & t, const std::string & op);
-    bool doVnetRouteTask(const KeyOpFieldsValuesTuple & t, const std::string & op);
-
-    ProducerStateTable m_appVnetRouteTable, m_appVnetRouteTunnelTable;
 };
 
 #endif // __VNETORCH_H
